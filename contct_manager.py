@@ -12,6 +12,8 @@ contact1 = Contact('Ali', '+998959698575','lutullo@gmail.com')
 
 baza = [contact1]
 
+baza2 = []
+
 
 def view_contact(s:list):
     for i in s:
@@ -130,10 +132,50 @@ def delete_contact(s:list):
         print("O'chiris bekor qilindi")
 
 
+def sms_send():
+        telefon15 = input("Telefon raqam kiriting: ").strip()
+        if re.fullmatch(r"^\+998[0-9]{9}$", telefon15):
+            for i in baza:
+                if i.telefon == telefon15:
+                    yoz = input("SMS Xabar kiriting: ")
+                    print("SMS yuborildi!")
 
-def menu(s:list):
-    print("1. Contact Qo'shish \n 2. Contact Tahrilash \n 3. Contact O'chirish \n 4. Barchasini Ko'rish \n 5. Break")
+                    baza2.append({
+                        "Telefon": telefon15,
+                        "Sms Xabar": yoz
+                    })
+                else:
+                    print("Bazada Malumot topilmadi!")
+        else:
+            print("Xato: Bu (+998xxxxxxxxx) formatda bulish kerak")
+
+
+def view_sms():
+    if not baza2:
+        print("SMS lar Mavjud emas")
+        return
+    print(" Yuborilgan SMSlar ")
+    for i in baza2:
+        print(f"Telefon: {i['Telefon']}, Xabar: {i['Sms Xabar']}")
+
+def delete_sms():
+    telefon10 = input("Telefon raqam kiriting: ").strip()
+    if re.fullmatch(r"^\+998[0-9]{9}$", telefon10):
+        for i in baza2:
+            if i["Telefon"] == telefon10:
+                print("O'chirilayotgan SMS")
+                print(f"Telefon: {i['Telefon']}, Xabar: {i["Sms Xabar"]} ")
+
+                sms_x_y = input("Haqiqatdan ham O'chirmoqchimisiz (Ha/Yo'q) : ").lower()
+                if sms_x_y == "ha":
+                    baza2.remove(i)
+                    print("SMS Xabar Mufaqiyatli O'chirildi ")
+            print("Bazada bu raqamga tegishli sms topilmadi")
+
+
+def contact_man(s:list):
     while True:
+        print("1. Contact Qo'shish \n 2. Contact Tahrilash \n 3. Contact O'chirish \n 4. Barchasini Ko'rish \n 5. Break")
         kod = input("Tanlang (1-5): ")
         if kod == "1":
             add_contact(s)
@@ -148,5 +190,44 @@ def menu(s:list):
             break
         else:
             print("Faqat (1-5) Tanlang ")
-if __name__== "__main__":
-    menu(baza)
+
+def sms_man(s:list):
+    while True:
+        print("1. SMS yuborish \n 2. SMS O'chirish \n 3. View all \n 4. Orqaga Qaytish \n 5. Exit")
+        kod = input("Tanlang (1-5): ")
+        if kod == "1":
+            sms_send()
+        elif kod == "2":
+            delete_sms()
+        elif kod == "3":
+            view_sms()
+        elif kod == "4":
+            kirish(s)
+        elif kod == "5":
+            print("Siz Dasturdan Chiqdingiz ")
+            break
+        else:
+            print("Faqat (1-5) Tanlang!")
+
+
+
+def  kirish(s):
+    print("1. Contact Manager Kirish \n 2. SMS Manager Kirish \n 3. Exit")
+    while True:
+        kod = input("Tanlang (1-3): ")
+        if kod == "1":
+            print("=== Siz Contact Managerdasiz === ")
+            contact_man(s)
+        elif kod == "2":
+            print("=== Siz SMS Managerdasiz === ")
+            sms_man(s)
+        elif kod == "3":
+            print(" Siz Dasturdan chiqdingiz ")
+            break
+        else:
+            print("Faqat (1-3) Tanlang ")
+
+if __name__ == "__main__":
+    kirish(baza)
+
+
